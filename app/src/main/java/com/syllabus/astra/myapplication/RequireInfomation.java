@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2017/4/14.
@@ -66,7 +68,7 @@ public class RequireInfomation {
 
 
 
-    public String getClassTableInfo(String code) {
+    public String getClassTableInfo(Map<String, String> map) {
         HttpURLConnection connection = null;
         OutputStream outputStream = null;
         BufferedReader bufferedReader = null;
@@ -82,7 +84,14 @@ public class RequireInfomation {
             connection.setRequestProperty("Cookie", cookie.getCookie());
             connection.setRequestProperty("Refer", path);
             //设置请求参数
-            String param = "Sel_XNXQ=20161&Sel_KC=660021&gs=1&txt_yzm=" + code;
+            StringBuffer params = new StringBuffer();
+
+            Set<Map.Entry<String, String>> set = map.entrySet();
+            for(Map.Entry entry : set) {
+                params.append(entry.getKey() + "=" + entry.getValue() + "&");
+            }
+            String param = params.substring(0, params.length() - 2);
+
             connection.connect();
             outputStream = connection.getOutputStream();
             outputStream.write(param.getBytes());
