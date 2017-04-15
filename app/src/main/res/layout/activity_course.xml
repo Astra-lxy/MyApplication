@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_course"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.syllabus.astra.myapplication.CourseActivity"
+    android:background="#F0F3F6"
+    android:orientation="vertical">
+    //标题
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white">
+        //返回
+        <LinearLayout
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            style="@style/mid_layout"
+            android:onClick="returnOnclick">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/returner"/>
+        </LinearLayout>
+        //标题
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/titleText"
+                android:textColor="@color/text_clo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="课程课表"
+                android:textSize="32sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    //查询条件
+    ]   <LinearLayout
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    //学期
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+        <TextView
+            android:background="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/text_clo"
+            android:text="学年学期："/>
+        <LinearLayout
+            android:layout_marginLeft="2dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/termsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#f85455" />
+            <Spinner
+                android:id="@+id/termsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    //课程
+    <LinearLayout
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:orientation="horizontal">
+        <TextView
+            android:background="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textColor="@color/text_clo"
+            android:text="课程：        "/>
+        <EditText
+            android:id="@+id/courseEdit"
+            android:background="@color/white"
+            android:layout_marginLeft="2dp"
+            android:layout_width="80sp"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_marginLeft="2dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/coursesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#f85455" />
+            <Spinner
+                android:id="@+id/coursesSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    //格式
+    <LinearLayout
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:orientation="horizontal">
+        <RadioGroup
+            android:id="@+id/formGroup"
+            android:background="@color/white"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/radioOne"
+                android:layout_weight="1"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="格式一"
+                android:checked="true"
+                ></RadioButton>
+            <RadioButton
+                android:id="@+id/radioTwo"
+                android:layout_weight="1"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="格式二"
+                ></RadioButton>
+        </RadioGroup>
+    </LinearLayout>
+
+    //验证码
+    <LinearLayout
+        android:id="@+id/identifyLinear"
+        android:layout_marginTop="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="30sp"
+        android:orientation="horizontal">
+        <TextView
+            android:background="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textColor="@color/text_clo"
+            android:text="验证码："/>
+        <EditText
+            android:id="@+id/identfyEdit"
+            android:background="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_marginLeft="2dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/identifyImage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/baseButton"
+            android:text="查询(数据库)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="tableOnclick"/>
+        <Button
+            android:id="@+id/webButton"
+            android:text="查询(网络)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="tableOnclick"/>
+    </GridLayout>
+
+</LinearLayout>
