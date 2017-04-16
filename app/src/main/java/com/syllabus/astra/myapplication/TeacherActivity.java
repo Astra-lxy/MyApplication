@@ -44,7 +44,7 @@ public class TeacherActivity extends AppCompatActivity {
 
     String Sel_XNXQ; //学年学期
     String Sel_JS; //教师id
-    String type = "1"; //默认格式二
+    String type = "1"; //默认格式一
     String txt_yzm; //验证码
 
 
@@ -124,7 +124,7 @@ public class TeacherActivity extends AppCompatActivity {
 
 
                 //获取各个控件的数据
-                if(termsText.getText().toString() == "2016-2017学年第一学期") {
+                if(termsText.getText().toString().equals("2016-2017学年第一学期")) {
                     Sel_XNXQ = "20161";
                 }
                 else {
@@ -160,6 +160,7 @@ public class TeacherActivity extends AppCompatActivity {
         //验证码部分隐藏
         //LinearLayout linearLayout=(LinearLayout) findViewById(R.id.identifyLinear);
         //linearLayout.setVisibility(View.GONE);
+
 
 
         //设置数据源，使用arrayList填充Spinner
@@ -204,7 +205,7 @@ public class TeacherActivity extends AppCompatActivity {
                 //通过teacherName获取teacherID并且赋值
 
                 Sel_JS = "";
-                teacherNameEditText.setText(teacherName);
+                //teacherNameEditText.setText(teacherName);
             }
 
             @Override
