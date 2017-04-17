@@ -19,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.syllabus.astra.myapplication.util.DBManager;
+import com.syllabus.astra.myapplication.util.TeacherList;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,6 +44,11 @@ public class TeacherActivity extends AppCompatActivity {
     private Spinner teacherNameSpinner;
     private EditText teacherNameEditText;
     Handler handler;
+    Handler handler2;
+
+
+    List<TeacherList> teachersNameList;
+    DBManager dbManager;
 
     String Sel_XNXQ; //学年学期
     String Sel_JS; //教师id
@@ -187,14 +195,18 @@ public class TeacherActivity extends AppCompatActivity {
             }
         });
 
-        List<String> teachersNameList = new ArrayList<>();
+        teachersNameList = new ArrayList<>();
         //此处从数据库获取教师姓名数据加入到list
         //
         ///
         //
-        //
 
-        final ArrayAdapter<String> teacherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, teachersNameList);
+        List<String> showList = new ArrayList<>();
+
+
+
+
+        final ArrayAdapter<String> teacherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, showList);
         teacherAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         teacherNameSpinner.setAdapter(teacherAdapter);
         teacherNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -202,10 +214,16 @@ public class TeacherActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String teacherName = teacherAdapter.getItem(i);
 
-                //通过teacherName获取teacherID并且赋值
+                //通过teacherName获取teacherID并且赋值e
+                TeacherList teacherList = new TeacherList();
+                for(TeacherList t : teachersNameList){
+                    if (t.getName().equals(teacherName)){
+                        teacherList = t;
+                    }
+                }
+                Sel_JS = teacherList.getId();
+                teacherNameEditText.setText(Sel_JS);
 
-                Sel_JS = "";
-                //teacherNameEditText.setText(teacherName);
             }
 
             @Override

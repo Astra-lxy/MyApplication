@@ -3,6 +3,7 @@ package com.syllabus.astra.myapplication;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.syllabus.astra.myapplication.util.Teacher;
 import com.syllabus.astra.myapplication.util.TeacherList;
 
 import org.jsoup.Jsoup;
@@ -57,6 +58,7 @@ public class RequireInfomation {
                         stringBuffer.append(line);
                     }
                     infomation = stringBuffer.toString();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -140,6 +142,7 @@ public class RequireInfomation {
     }
 
     public List<TeacherList> getTeacherInfoFromNet(){
+
         Document dname = Jsoup.parse(infomation);
         Elements script = dname.select("script");
         Document dname1 = Jsoup.parse(script.toString());
@@ -155,6 +158,103 @@ public class RequireInfomation {
         }
         return list;
     }
+
+    public List<Teacher> getCourseByTeacherFromNet(String tableHtml) {
+        Document dInfo = Jsoup.parse(tableHtml);
+        Elements eInfo=dInfo.select("table").select("tr");
+        class ClassInfo1{
+            private String week;
+            private String lesson;
+            private String info;
+
+            public String getWeek() {
+                return week;
+            }
+
+            public void setWeek(String week) {
+                this.week = week;
+            }
+
+            public String getLesson() {
+                return lesson;
+            }
+
+            public void setLesson(String lesson) {
+                this.lesson = lesson;
+            }
+
+            public String getInfo() {
+                return info;
+            }
+
+            public void setInfo(String info) {
+                this.info = info;
+            }
+        }
+        ArrayList<ClassInfo1> list = new ArrayList<ClassInfo1>();
+        for (int i = 5; i <eInfo.size(); i++) {
+            Elements eInfo1=eInfo.get(i).select("td");
+            if(eInfo1.text().toString().equals("注1：")){
+                break;
+            }
+            if(eInfo1.size()==9) {
+                for (int j = 2; j < eInfo1.size(); j++) {
+                    if(eInfo1.get(j).text().length()!=0){
+                        ClassInfo1 classInfo1=new ClassInfo1();
+                        classInfo1.setWeek(String.valueOf(j-1));
+                        classInfo1.setLesson(String.valueOf(i-4));
+                        classInfo1.setInfo(eInfo1.get(j).text());
+                        list.add(classInfo1);
+                    }
+                }
+            }else {
+                for (int j = 1; j < eInfo1.size(); j++) {
+                    if(eInfo1.get(j).text().length()!=0){
+                        ClassInfo1 classInfo1=new ClassInfo1();
+                        classInfo1.setWeek(String.valueOf(j));
+                        classInfo1.setLesson(String.valueOf(i-4));
+                        classInfo1.setInfo(eInfo1.get(j).text());
+                        list.add(classInfo1);
+                    }
+                }
+            }
+        }
+        List<Teacher> courselist = new ArrayList<>();
+        for(int i = 0; i < 5; i ++){
+            Teacher teacher = new Teacher();
+            courselist.add(teacher);
+        }
+        for(ClassInfo1 classInfo1 : list) {
+            int lesson = Integer.valueOf(classInfo1.getLesson());
+            int week = Integer.valueOf(classInfo1.getWeek());
+            if(week == 1) {
+                courselist.get(lesson).setMon(classInfo1.getInfo());
+            }
+            if(week == 2) {
+                courselist.get(lesson).setTues(classInfo1.getInfo());
+            }
+            if(week == 3) {
+                courselist.get(lesson).setWed(classInfo1.getInfo());
+            }
+            if(week == 4) {
+                courselist.get(lesson).setThur(classInfo1.getInfo());
+            }
+            if(week == 5) {
+                courselist.get(lesson).setFri(classInfo1.getInfo());
+            }
+            if(week == 6) {
+                courselist.get(lesson).setSat(classInfo1.getInfo());
+            }
+            if(week == 7) {
+                courselist.get(lesson).setSun(classInfo1.getInfo());
+            }
+
+        }
+
+
+        return courselist;
+    }
+
 
 
     /*//获取html和cookie
