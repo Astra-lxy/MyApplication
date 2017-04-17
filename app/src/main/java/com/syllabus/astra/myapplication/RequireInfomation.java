@@ -3,7 +3,16 @@ package com.syllabus.astra.myapplication;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.syllabus.astra.myapplication.util.TeacherList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +20,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,6 +76,7 @@ public class RequireInfomation {
     public String getHtml() {
         return infomation;
     }
+
 
 
 
@@ -125,6 +137,23 @@ public class RequireInfomation {
             e.printStackTrace();
         }
         return bitmap;
+    }
+
+    public List<TeacherList> getTeacherInfoFromNet(){
+        Document dname = Jsoup.parse(infomation);
+        Elements script = dname.select("script");
+        Document dname1 = Jsoup.parse(script.toString());
+        String data = dname1.data();
+        Document dname2 = Jsoup.parse(data);
+        Elements script1 = dname2.getElementsByTag("option");
+        List<TeacherList> list = new ArrayList<>();
+        TeacherList teacher;
+        for(Element e1 : script1) {
+            teacher = new TeacherList();
+            teacher.setId(e1.attr("value"));
+            teacher.setName(e1.text());
+        }
+        return list;
     }
 
 
