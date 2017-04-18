@@ -2,6 +2,7 @@ package com.syllabus.astra.myapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.syllabus.astra.myapplication.util.Teacher;
 import com.syllabus.astra.myapplication.util.TeacherList;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by Administrator on 2017/4/14.
@@ -33,13 +35,15 @@ import java.util.Set;
 public class RequireInfomation {
 
     private  String path;
-    private String infomation;
+    private String infomation = "";
     private CookieTemp cookie = new CookieTemp();
     private Bitmap bitmap;
+    CountDownLatch countDownLatch;
 
 
     //除了构造方法，即获取html和cookie之外，其它方法在activity中都需要开辟一个线程来执行
     public RequireInfomation(String path) {
+        countDownLatch = new CountDownLatch(1);
         this.path = path;
         new Thread(new Runnable() {
             @Override
@@ -49,6 +53,7 @@ public class RequireInfomation {
                 try {
                     URL url = new URL(RequireInfomation.this.path);
                     connection = (HttpURLConnection) url.openConnection();
+
                     InputStream inputStream = connection.getInputStream();
                     cookie.setCookie(connection.getHeaderField("Set-Cookie"));
                     bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "gb2312"));
@@ -57,7 +62,12 @@ public class RequireInfomation {
                     while ((line = bufferedReader.readLine()) != null) {
                         stringBuffer.append(line);
                     }
-                    infomation = stringBuffer.toString();
+                    Log.i("requireinfomation:", RequireInfomation.this.toString());
+
+                        infomation = stringBuffer.toString();
+
+                    countDownLatch.countDown();
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -141,22 +151,39 @@ public class RequireInfomation {
         return bitmap;
     }
 
-    public List<TeacherList> getTeacherInfoFromNet(){
+    public List<TeacherList> getTeacherInfoFromNet() {
 
-        Document dname = Jsoup.parse(infomation);
+        /*try {
+            countDownLatch.await();
+            Log.i("requireInfomation1:", this.toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Log.i("informationString***", infomation);*/
+        Document dname = null;
+        try {
+            dname = Jsoup.connect("http://218.62.46.130/jwmis/ZNPK/Private/List_JS.aspx?xnxq=20161&t=29").get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Elements script = dname.select("script");
         Document dname1 = Jsoup.parse(script.toString());
-        String data = dname1.data();
+        String data  = dname1.data();
+        Log.i("dname1****", dname1.toString());
         Document dname2 = Jsoup.parse(data);
+        Log.i("dname2****", dname2.toString());
         Elements script1 = dname2.getElementsByTag("option");
         List<TeacherList> list = new ArrayList<>();
         TeacherList teacher;
-        for(Element e1 : script1) {
+        for (Element e1 : script1) {
             teacher = new TeacherList();
             teacher.setId(e1.attr("value"));
             teacher.setName(e1.text());
+            Log.i("text***", e1.text());
+            list.add(teacher);
         }
         return list;
+
     }
 
     public List<Teacher> getCourseByTeacherFromNet(String tableHtml) {

@@ -9,6 +9,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+
+
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.syllabus.astra.myapplication.util.DBManager;
+import com.syllabus.astra.myapplication.util.Teacher;
 import com.syllabus.astra.myapplication.util.TeacherList;
 
 import java.io.File;
@@ -33,18 +36,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TeacherActivity extends AppCompatActivity {
-    private Spinner spinner;
+public class TeacherActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    Spinner spinner;
     private TextView termsText;
     private List<String> termsList;
     private ArrayAdapter arrayAdapter;
     private Button button;
     private ImageView identifyImageView;
     private EditText identifyEditText;
-    private Spinner teacherNameSpinner;
+    Spinner teacherNameSpinner;
     private EditText teacherNameEditText;
     Handler handler;
-    Handler handler2;
 
 
     List<TeacherList> teachersNameList;
@@ -80,7 +82,7 @@ public class TeacherActivity extends AppCompatActivity {
 
 
         //网络初始化获取html和cookie
-        final RequireInfomation requireInfomation = new RequireInfomation("http://211.67.107.38/jwweb/ZNPK/TeacherKBFB.aspx");
+        final RequireInfomation requireInfomation = new RequireInfomation("http://211.67.107.38/jwweb/ZNPK/TeacherKBFB.aspx/Private/List_JS.aspx?xnxq=20161&t=19");
 
         //绑定控件
         identifyImageView = (ImageView) findViewById(R.id.identifyImage);
@@ -201,7 +203,34 @@ public class TeacherActivity extends AppCompatActivity {
         ///
         //
 
-        List<String> showList = new ArrayList<>();
+        final List<String> showList = new ArrayList<>();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DBManager dbManager = new DBManager(TeacherActivity.this);
+                if(dbManager.queryTeacherList().size() == 0)
+                {
+                    teachersNameList = requireInfomation.getTeacherInfoFromNet();
+
+                    dbManager.addTeacherList(teachersNameList);
+
+                }
+                else {
+                    teachersNameList = dbManager.queryTeacherList();
+                    for(TeacherList tname : teachersNameList) {
+                        showList.add(tname.getName());
+
+                    }
+
+                }
+
+
+
+            }
+        }).start();
+
+
 
 
 
@@ -209,28 +238,18 @@ public class TeacherActivity extends AppCompatActivity {
         final ArrayAdapter<String> teacherAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, showList);
         teacherAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         teacherNameSpinner.setAdapter(teacherAdapter);
-        teacherNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String teacherName = teacherAdapter.getItem(i);
+        teacherNameSpinner.setOnItemSelectedListener(this);
+    }
 
-                //通过teacherName获取teacherID并且赋值e
-                TeacherList teacherList = new TeacherList();
-                for(TeacherList t : teachersNameList){
-                    if (t.getName().equals(teacherName)){
-                        teacherList = t;
-                    }
-                }
-                Sel_JS = teacherList.getId();
-                teacherNameEditText.setText(Sel_JS);
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.i("Sel_JS----------", Sel_JS);
+        Log.i("seleted item%%%%%%%", "????????");
+    }
 
-            }
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 }
 
